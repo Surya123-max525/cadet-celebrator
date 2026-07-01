@@ -1,17 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
-import {
-  Award,
-  Medal,
-  Trophy,
-  Star,
-  MapPin,
-  Calendar,
-  Users,
-  Download,
-  Share2,
-  Sparkles,
-} from "lucide-react";
+import { useEffect, useState } from "react";
+import { Trophy, Medal, Star, MapPin, Calendar, Download, Share2, Sparkles } from "lucide-react";
 import heroImg from "@/assets/hero-cadets.jpg";
 import feliImg from "@/assets/felicitation.jpg";
 
@@ -25,9 +14,6 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-// ============================================================
-// EVENT CONFIG — edit these placeholders for any event
-// ============================================================
 const EVENT = {
   institution: "[Your Institution Name]",
   eventName: "[Event / Competition Name]",
@@ -36,22 +22,12 @@ const EVENT = {
   dateLabel: "[Event Dates]",
   achievementTitle: "Overall Championship",
   tagline: "Champions 2026",
-  heroLine1: "Congratulations to Our",
-  heroLine2: "Winning Team",
+  heroLine1: "Congratulations",
+  heroLine2: "to Our Winning Team",
   heroSubtitle:
-    "Our team has brought immense pride and glory to our institution by securing the top honours at [Event / Competition Name] hosted by [Host Organization] at [Venue].",
-  achievementBody:
-    "Throughout the event, our participants showcased exceptional discipline, leadership, teamwork, and dedication. They secured the top honours along with numerous medals and awards across various competitions.",
-  achievementFootnote:
-    "Their remarkable performance is a reflection of unwavering commitment, courage, discipline, and excellence.",
-  felicitationCaption:
-    "Our beloved [Principal / Head] felicitating the team for their outstanding achievements and appreciating their dedication and exemplary performance.",
+    "Our team has brought immense pride and glory to our institution by securing the top honours at [Event Name], hosted by [Host Organization] at [Venue].",
   quote: "Discipline, Dedication, Determination —",
   quoteAccent: "the Hallmarks of Every Champion.",
-  footerHeadline: "Congratulations Once Again to Our Team!",
-  footerBody:
-    "Your hard work, discipline, and determination continue to inspire our institution.",
-  participantsHeading: "Our Winners",
 };
 
 const PARTICIPANTS: { name: string; detail: string }[] = [
@@ -63,76 +39,16 @@ const PARTICIPANTS: { name: string; detail: string }[] = [
   { name: "Participant 6", detail: "II Civil" },
 ];
 
-const STATS = [
-  { icon: Trophy, label: "Overall Championship", value: 1, suffix: "" },
-  { icon: Medal, label: "Gold Medals", value: 8, suffix: "+" },
-  { icon: Award, label: "Award Winners", value: 15, suffix: "+" },
-  { icon: Users, label: "Team Members", value: PARTICIPANTS.length, suffix: "" },
-];
-
-function useCounter(target: number, start: boolean, duration = 1600) {
-  const [v, setV] = useState(0);
-  useEffect(() => {
-    if (!start) return;
-    let raf = 0;
-    const t0 = performance.now();
-    const tick = (t: number) => {
-      const p = Math.min(1, (t - t0) / duration);
-      setV(Math.round(target * (1 - Math.pow(1 - p, 3))));
-      if (p < 1) raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [target, start, duration]);
-  return v;
-}
-
-function StatCard({ item, delay }: { item: (typeof STATS)[number]; delay: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([e]) => e.isIntersecting && setInView(true),
-      { threshold: 0.4 },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  const n = useCounter(item.value, inView);
-  const Icon = item.icon;
-  return (
-    <div
-      ref={ref}
-      className="glass rounded-3xl p-6 md:p-8 text-center animate-fade-up hover:-translate-y-1 transition-transform duration-300"
-      style={{ animationDelay: `${delay}ms` }}
-    >
-      <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--gradient-gold)] shadow-glow">
-        <Icon className="h-7 w-7 text-primary" />
-      </div>
-      <div className="font-display text-4xl md:text-5xl font-bold text-primary">
-        {n}
-        {item.suffix}
-      </div>
-      <div className="mt-2 text-sm md:text-base text-muted-foreground font-medium">
-        {item.label}
-      </div>
-    </div>
-  );
-}
-
 function Confetti() {
-  const pieces = Array.from({ length: 40 });
+  const pieces = Array.from({ length: 30 });
   return (
-    <div className="pointer-events-none fixed inset-0 z-40 overflow-hidden">
+    <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden rounded-[inherit]">
       {pieces.map((_, i) => {
         const left = Math.random() * 100;
-        const size = 6 + Math.random() * 8;
+        const size = 5 + Math.random() * 7;
         const dur = 6 + Math.random() * 6;
         const delay = Math.random() * 4;
         const colors = ["#D4A017", "#556B2F", "#1B2A4E", "#F5DEB3", "#E63946"];
-        const c = colors[i % colors.length];
         return (
           <span
             key={i}
@@ -141,7 +57,7 @@ function Confetti() {
               left: `${left}%`,
               width: size,
               height: size * 0.4,
-              background: c,
+              background: colors[i % colors.length],
               animationDuration: `${dur}s`,
               animationDelay: `${delay}s`,
             }}
@@ -150,32 +66,6 @@ function Confetti() {
       })}
     </div>
   );
-}
-
-function ScrollProgress() {
-  const [p, setP] = useState(0);
-  useEffect(() => {
-    const onScroll = () => {
-      const h = document.documentElement;
-      const scrolled = h.scrollTop / (h.scrollHeight - h.clientHeight);
-      setP(scrolled * 100);
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-  return (
-    <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-transparent">
-      <div
-        className="h-full bg-[var(--gradient-gold)] transition-[width] duration-150"
-        style={{ width: `${p}%` }}
-      />
-    </div>
-  );
-}
-
-function Sparkle({ className = "" }: { className?: string }) {
-  return <Sparkles className={`animate-sparkle text-accent ${className}`} />;
 }
 
 function Index() {
@@ -203,155 +93,100 @@ function Index() {
   };
 
   return (
-    <main className="relative min-h-screen overflow-x-hidden">
-      {/* PRINT-ONLY POSTER: shown only when printing (see @media print in styles.css) */}
-      <section className="print-poster hidden">
-        <h1 className="font-display text-4xl font-bold mb-2">
-          {EVENT.heroLine1} {EVENT.heroLine2}
-        </h1>
-        <p className="uppercase tracking-[0.3em] text-sm mb-6">{EVENT.tagline}</p>
-        <img src={feliImg} alt="Felicitation ceremony" />
-        <p className="mt-6 max-w-2xl mx-auto text-base italic">
-          {EVENT.felicitationCaption}
-        </p>
-        <p className="mt-4 font-semibold">{EVENT.institution}</p>
-      </section>
-
-      <div className="screen-only">
-        <ScrollProgress />
-        {showConfetti && <Confetti />}
+    <main className="min-h-screen w-full flex flex-col items-center justify-start gap-6 py-8 px-4 print:p-0 print:gap-0">
+      {/* Action bar — hidden on print */}
+      <div className="no-print flex flex-wrap items-center justify-center gap-3">
+        <button
+          onClick={() => window.print()}
+          className="inline-flex items-center gap-2 rounded-full bg-[var(--gradient-gold)] px-5 py-2.5 text-sm font-semibold text-primary shadow-glow hover:scale-105 transition-transform"
+        >
+          <Download className="h-4 w-4" /> Download A4 Poster
+        </button>
+        <button
+          onClick={share}
+          className="inline-flex items-center gap-2 rounded-full glass px-5 py-2.5 text-sm font-semibold text-primary hover:scale-105 transition-transform"
+        >
+          <Share2 className="h-4 w-4" /> Share
+        </button>
       </div>
 
+      {/* ===== A4 POSTER ===== */}
+      <article
+        className="a4-sheet relative bg-white text-primary shadow-elegant overflow-hidden print:shadow-none"
+      >
+        {showConfetti && <Confetti />}
 
-      {/* Top corner badges */}
-      <div className="pointer-events-none fixed top-4 left-4 z-30">
-        <div className="glass rounded-2xl px-4 py-2 text-xs md:text-sm font-semibold text-primary pointer-events-auto">
+        {/* Decorative corner ribbons */}
+        <div className="absolute top-0 left-0 h-24 w-24 bg-[var(--gradient-gold)] [clip-path:polygon(0_0,100%_0,0_100%)] opacity-90" />
+        <div className="absolute top-0 right-0 h-24 w-24 bg-[var(--gradient-gold)] [clip-path:polygon(0_0,100%_0,100%_100%)] opacity-90" />
+
+        {/* Institution / NCC badges */}
+        <div className="absolute top-3 left-4 z-10 text-[10px] font-bold uppercase tracking-widest text-primary">
           {EVENT.institution}
         </div>
-      </div>
-      <div className="pointer-events-none fixed top-4 right-4 z-30">
-        <div className="glass rounded-2xl px-4 py-2 text-xs md:text-sm font-semibold text-primary pointer-events-auto flex items-center gap-2">
-          <Star className="h-4 w-4 text-accent" fill="currentColor" /> Champions
+        <div className="absolute top-3 right-4 z-10 flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-primary">
+          <Star className="h-3 w-3 text-primary" fill="currentColor" /> Champions
         </div>
-      </div>
 
-      {/* HERO */}
-      <section className="relative min-h-[100svh] flex items-center justify-center px-4 py-24">
-        <img
-          src={heroImg}
-          alt="Team celebration hero"
-          width={1920}
-          height={1088}
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-        <div className="absolute inset-0" style={{ background: "var(--gradient-hero)" }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
-
-        <Sparkle className="absolute top-24 left-[10%] h-6 w-6" />
-        <Sparkle className="absolute top-40 right-[12%] h-8 w-8" />
-        <Sparkle className="absolute bottom-32 left-[20%] h-5 w-5" />
-
-        <div className="relative z-10 max-w-5xl text-center text-white animate-fade-up">
-          <div className="inline-flex items-center gap-2 rounded-full glass-dark px-4 py-2 mb-6 text-sm text-white">
-            <Trophy className="h-4 w-4 text-accent" />
-            <span className="tracking-widest uppercase">{EVENT.tagline}</span>
+        <div className="a4-inner flex flex-col items-center text-center">
+          {/* Header */}
+          <div className="mt-4 inline-flex items-center gap-2 rounded-full border border-accent/60 bg-accent/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.25em] text-primary">
+            <Trophy className="h-3 w-3 text-accent" /> {EVENT.tagline}
           </div>
-          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold leading-tight">
+
+          <h1 className="font-display mt-3 text-3xl md:text-4xl font-bold leading-tight">
             {EVENT.heroLine1}
-            <span className="block text-gold-gradient mt-2">{EVENT.heroLine2}</span>
+            <span className="block text-gold-gradient mt-1 text-3xl md:text-4xl">
+              {EVENT.heroLine2}
+            </span>
           </h1>
-          <p className="mt-8 mx-auto max-w-3xl text-base md:text-lg text-white/85 leading-relaxed">
+
+          <p className="mt-3 max-w-[85%] text-[11px] md:text-xs leading-relaxed text-foreground/80">
             {EVENT.heroSubtitle}
           </p>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            <button
-              onClick={() => window.print()}
-              className="inline-flex items-center gap-2 rounded-full bg-[var(--gradient-gold)] px-6 py-3 font-semibold text-primary shadow-glow hover:scale-105 transition-transform"
-            >
-              <Download className="h-4 w-4" /> Download Poster
-            </button>
-            <button
-              onClick={share}
-              className="inline-flex items-center gap-2 rounded-full glass-dark px-6 py-3 font-semibold text-white hover:scale-105 transition-transform"
-            >
-              <Share2 className="h-4 w-4" /> Share
-            </button>
-          </div>
-        </div>
-      </section>
 
-      {/* ACHIEVEMENT */}
-      <section className="relative px-4 py-20 md:py-28">
-        <div className="mx-auto max-w-4xl">
-          <div className="glass rounded-[2rem] p-8 md:p-14 animate-fade-up relative overflow-hidden">
-            <div className="absolute inset-x-0 top-0 h-1 animate-shimmer" />
-            <div className="flex items-center gap-3 mb-6">
-              <div className="h-12 w-12 rounded-2xl bg-[var(--gradient-gold)] flex items-center justify-center shadow-glow">
-                <Medal className="h-6 w-6 text-primary" />
-              </div>
-              <h2 className="font-display text-3xl md:text-4xl font-bold text-primary">
-                The Achievement
-              </h2>
+          {/* Hero image */}
+          <div className="mt-4 w-full">
+            <div className="relative rounded-xl overflow-hidden border-2 border-accent/70">
+              <img
+                src={heroImg}
+                alt="Winning team"
+                className="w-full h-[26%] max-h-[240px] object-cover"
+                style={{ height: "240px" }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
             </div>
-            <p className="text-base md:text-lg leading-relaxed text-foreground/85">
-              {EVENT.achievementBody}{" "}
-              <span className="font-display font-bold text-primary">
+          </div>
+
+          {/* Achievement */}
+          <div className="mt-4 w-full rounded-xl border border-accent/40 bg-secondary/30 px-4 py-3">
+            <div className="flex items-center justify-center gap-2 text-primary">
+              <Medal className="h-4 w-4 text-accent" />
+              <span className="font-display text-sm font-bold uppercase tracking-wider">
                 {EVENT.achievementTitle}
               </span>
-              .
-            </p>
-            <p className="mt-4 text-base md:text-lg leading-relaxed text-foreground/85">
-              {EVENT.achievementFootnote}
-            </p>
+              <Medal className="h-4 w-4 text-accent" />
+            </div>
           </div>
-        </div>
-      </section>
 
-      {/* FELICITATION */}
-      <section className="relative px-4 py-16 md:py-24">
-        <div className="mx-auto max-w-5xl text-center">
-          <p className="uppercase tracking-[0.3em] text-xs text-accent font-semibold mb-3">
-            A Moment of Honour
-          </p>
-          <h2 className="font-display text-3xl md:text-5xl font-bold text-primary mb-10">
-            Felicitation Ceremony
-          </h2>
-          <div className="relative mx-auto max-w-3xl animate-fade-up">
-            <div
-              className="absolute -inset-3 rounded-[2rem] opacity-70 blur-2xl"
-              style={{ background: "var(--gradient-gold)" }}
-            />
-            <div className="relative rounded-[2rem] overflow-hidden shadow-elegant border-4 border-white">
+          {/* Felicitation image centered */}
+          <div className="mt-4 w-full flex flex-col items-center">
+            <p className="text-[9px] uppercase tracking-[0.3em] text-accent font-semibold mb-1">
+              Felicitation Ceremony
+            </p>
+            <div className="relative w-[75%] max-w-[420px]">
+              <div className="absolute -inset-1 rounded-xl bg-[var(--gradient-gold)] opacity-60 blur-md" />
               <img
                 src={feliImg}
                 alt="Felicitation ceremony"
-                width={1280}
-                height={896}
-                loading="lazy"
-                className="w-full h-auto"
+                className="relative w-full rounded-xl border-2 border-white shadow-elegant object-cover"
+                style={{ maxHeight: "220px" }}
               />
             </div>
           </div>
-          <p className="mt-8 mx-auto max-w-2xl text-sm md:text-base text-muted-foreground italic">
-            {EVENT.felicitationCaption}
-          </p>
-        </div>
-      </section>
 
-      {/* STATS */}
-      <section className="relative px-4 py-20 md:py-28">
-        <div className="mx-auto max-w-6xl">
-          <div className="text-center mb-12">
-            <h2 className="font-display text-3xl md:text-5xl font-bold text-primary">
-              Highlights of Glory
-            </h2>
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-            {STATS.map((s, i) => (
-              <StatCard key={s.label} item={s} delay={i * 120} />
-            ))}
-          </div>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Meta row */}
+          <div className="mt-4 grid grid-cols-3 gap-2 w-full text-[10px]">
             {[
               { icon: MapPin, text: EVENT.venue },
               { icon: Calendar, text: EVENT.dateLabel },
@@ -359,94 +194,59 @@ function Index() {
             ].map((it) => (
               <div
                 key={it.text}
-                className="glass rounded-2xl px-5 py-4 flex items-center gap-3"
+                className="flex items-center gap-1.5 rounded-lg border border-border bg-white px-2 py-1.5"
               >
-                <it.icon className="h-5 w-5 text-accent" />
-                <span className="text-sm md:text-base font-medium text-primary">
-                  {it.text}
-                </span>
+                <it.icon className="h-3 w-3 text-accent shrink-0" />
+                <span className="truncate font-medium text-primary">{it.text}</span>
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* QUOTE */}
-      <section className="relative px-4 py-24 md:py-32">
-        <div className="mx-auto max-w-4xl text-center">
-          <div className="flex justify-center mb-6">
-            <Sparkle className="h-8 w-8" />
-          </div>
-          <blockquote className="font-display text-2xl md:text-4xl lg:text-5xl font-bold leading-tight text-primary">
-            &ldquo;{EVENT.quote}
-            <span className="block mt-2 text-gold-gradient">
-              {EVENT.quoteAccent}&rdquo;
-            </span>
-          </blockquote>
-        </div>
-      </section>
-
-      {/* PARTICIPANTS — mobile inline */}
-      <section className="relative px-4 pb-32 lg:hidden">
-        <ParticipantsTable />
-      </section>
-
-      {/* PARTICIPANTS — desktop floating bottom-right */}
-      <div className="hidden lg:block fixed bottom-6 right-6 z-30 w-[360px] animate-fade-up">
-        <ParticipantsTable compact />
-      </div>
-
-      {/* FOOTER */}
-      <footer className="relative px-4 py-16 mt-8">
-        <div className="mx-auto max-w-4xl text-center">
-          <div className="glass rounded-[2rem] p-8 md:p-12">
-            <Trophy className="mx-auto h-10 w-10 text-accent mb-4" />
-            <h3 className="font-display text-2xl md:text-3xl font-bold text-primary">
-              {EVENT.footerHeadline}
-            </h3>
-            <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-              {EVENT.footerBody}
-            </p>
-            <div className="mt-6 text-xs uppercase tracking-[0.3em] text-accent font-semibold">
-              {EVENT.institution}
+          {/* Participants table */}
+          <div className="mt-4 w-full rounded-xl overflow-hidden border border-border">
+            <div className="bg-primary text-primary-foreground px-3 py-1.5 flex items-center gap-2">
+              <Trophy className="h-3 w-3 text-accent" />
+              <span className="font-display text-xs font-bold uppercase tracking-wider">
+                Our Winners
+              </span>
             </div>
+            <table className="w-full text-[10px]">
+              <thead>
+                <tr className="bg-secondary/40 text-[9px] uppercase tracking-wider text-muted-foreground">
+                  <th className="text-left px-3 py-1.5 font-semibold">Name</th>
+                  <th className="text-left px-3 py-1.5 font-semibold">Class / Team</th>
+                </tr>
+              </thead>
+              <tbody>
+                {PARTICIPANTS.map((p, i) => (
+                  <tr key={i} className="border-t border-border/60">
+                    <td className="px-3 py-1 font-medium text-primary">{p.name}</td>
+                    <td className="px-3 py-1 text-muted-foreground">{p.detail}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Quote */}
+          <blockquote className="mt-4 font-display text-sm md:text-base font-bold leading-snug text-primary">
+            <Sparkles className="inline h-3 w-3 text-accent mr-1" />
+            &ldquo;{EVENT.quote}{" "}
+            <span className="text-gold-gradient">{EVENT.quoteAccent}&rdquo;</span>
+          </blockquote>
+
+          {/* Footer strip */}
+          <div className="mt-auto pt-3 w-full text-center">
+            <div className="h-[2px] w-full bg-[var(--gradient-gold)] rounded-full mb-2" />
+            <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-primary">
+              {EVENT.institution}
+            </p>
+            <p className="text-[9px] text-muted-foreground mt-0.5">
+              Your hard work continues to inspire our institution.
+            </p>
           </div>
         </div>
-      </footer>
+      </article>
     </main>
-  );
-}
-
-function ParticipantsTable({ compact = false }: { compact?: boolean }) {
-  return (
-    <div className="glass rounded-3xl overflow-hidden shadow-elegant">
-      <div className="bg-primary text-primary-foreground px-5 py-4 flex items-center gap-2">
-        <Trophy className="h-5 w-5 text-accent" />
-        <h3 className="font-display font-bold tracking-wide">
-          {EVENT.participantsHeading}
-        </h3>
-      </div>
-      <div className={compact ? "max-h-[320px] overflow-auto" : ""}>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="text-left text-xs uppercase tracking-wider text-muted-foreground bg-secondary/40">
-              <th className="px-5 py-3 font-semibold">Name</th>
-              <th className="px-5 py-3 font-semibold">Class / Team</th>
-            </tr>
-          </thead>
-          <tbody>
-            {PARTICIPANTS.map((p, i) => (
-              <tr
-                key={i}
-                className="border-t border-border/60 hover:bg-accent/10 transition-colors"
-              >
-                <td className="px-5 py-3 font-medium text-primary">{p.name}</td>
-                <td className="px-5 py-3 text-muted-foreground">{p.detail}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
   );
 }
