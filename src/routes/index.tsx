@@ -6,8 +6,8 @@ import {
   Trophy,
   Star,
   MapPin,
-  Building2,
-  Tent,
+  Calendar,
+  Users,
   Download,
   Share2,
   Sparkles,
@@ -25,20 +25,49 @@ export const Route = createFileRoute("/")({
   }),
 });
 
-const CADETS: { name: string; className: string }[] = [
-  { name: "Cadet Name 1", className: "III EEE" },
-  { name: "Cadet Name 2", className: "II CSE" },
-  { name: "Cadet Name 3", className: "III AIML" },
-  { name: "Cadet Name 4", className: "II ECE" },
-  { name: "Cadet Name 5", className: "III Mechanical" },
-  { name: "Cadet Name 6", className: "II Civil" },
+// ============================================================
+// EVENT CONFIG — edit these placeholders for any event
+// ============================================================
+const EVENT = {
+  institution: "[Your Institution Name]",
+  eventName: "[Event / Competition Name]",
+  hostedBy: "[Host Organization]",
+  venue: "[Venue]",
+  dateLabel: "[Event Dates]",
+  achievementTitle: "Overall Championship",
+  tagline: "Champions 2026",
+  heroLine1: "Congratulations to Our",
+  heroLine2: "Winning Team",
+  heroSubtitle:
+    "Our team has brought immense pride and glory to our institution by securing the top honours at [Event / Competition Name] hosted by [Host Organization] at [Venue].",
+  achievementBody:
+    "Throughout the event, our participants showcased exceptional discipline, leadership, teamwork, and dedication. They secured the top honours along with numerous medals and awards across various competitions.",
+  achievementFootnote:
+    "Their remarkable performance is a reflection of unwavering commitment, courage, discipline, and excellence.",
+  felicitationCaption:
+    "Our beloved [Principal / Head] felicitating the team for their outstanding achievements and appreciating their dedication and exemplary performance.",
+  quote: "Discipline, Dedication, Determination —",
+  quoteAccent: "the Hallmarks of Every Champion.",
+  footerHeadline: "Congratulations Once Again to Our Team!",
+  footerBody:
+    "Your hard work, discipline, and determination continue to inspire our institution.",
+  participantsHeading: "Our Winners",
+};
+
+const PARTICIPANTS: { name: string; detail: string }[] = [
+  { name: "Participant 1", detail: "III EEE" },
+  { name: "Participant 2", detail: "II CSE" },
+  { name: "Participant 3", detail: "III AIML" },
+  { name: "Participant 4", detail: "II ECE" },
+  { name: "Participant 5", detail: "III Mechanical" },
+  { name: "Participant 6", detail: "II Civil" },
 ];
 
 const STATS = [
   { icon: Trophy, label: "Overall Championship", value: 1, suffix: "" },
   { icon: Medal, label: "Gold Medals", value: 8, suffix: "+" },
-  { icon: Award, label: "Competition Winners", value: 15, suffix: "+" },
-  { icon: Tent, label: "Days of Training", value: 10, suffix: "" },
+  { icon: Award, label: "Award Winners", value: 15, suffix: "+" },
+  { icon: Users, label: "Team Members", value: PARTICIPANTS.length, suffix: "" },
 ];
 
 function useCounter(target: number, start: boolean, duration = 1600) {
@@ -158,8 +187,8 @@ function Index() {
 
   const share = async () => {
     const data = {
-      title: "Congratulations to Our NCC Cadets",
-      text: "Our cadets secured the Overall Championship at the 10-Day CATC!",
+      title: `Congratulations — ${EVENT.eventName}`,
+      text: EVENT.heroSubtitle,
       url: typeof window !== "undefined" ? window.location.href : "",
     };
     if (typeof navigator !== "undefined" && navigator.share) {
@@ -178,15 +207,15 @@ function Index() {
       <ScrollProgress />
       {showConfetti && <Confetti />}
 
-      {/* Top corner logos */}
+      {/* Top corner badges */}
       <div className="pointer-events-none fixed top-4 left-4 z-30">
         <div className="glass rounded-2xl px-4 py-2 text-xs md:text-sm font-semibold text-primary pointer-events-auto">
-          [Your College Name]
+          {EVENT.institution}
         </div>
       </div>
       <div className="pointer-events-none fixed top-4 right-4 z-30">
         <div className="glass rounded-2xl px-4 py-2 text-xs md:text-sm font-semibold text-primary pointer-events-auto flex items-center gap-2">
-          <Star className="h-4 w-4 text-accent" fill="currentColor" /> NCC
+          <Star className="h-4 w-4 text-accent" fill="currentColor" /> Champions
         </div>
       </div>
 
@@ -194,18 +223,14 @@ function Index() {
       <section className="relative min-h-[100svh] flex items-center justify-center px-4 py-24">
         <img
           src={heroImg}
-          alt="NCC cadets in formation"
+          alt="Team celebration hero"
           width={1920}
           height={1088}
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div
-          className="absolute inset-0"
-          style={{ background: "var(--gradient-hero)" }}
-        />
+        <div className="absolute inset-0" style={{ background: "var(--gradient-hero)" }} />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
 
-        {/* floating sparkles */}
         <Sparkle className="absolute top-24 left-[10%] h-6 w-6" />
         <Sparkle className="absolute top-40 right-[12%] h-8 w-8" />
         <Sparkle className="absolute bottom-32 left-[20%] h-5 w-5" />
@@ -213,17 +238,14 @@ function Index() {
         <div className="relative z-10 max-w-5xl text-center text-white animate-fade-up">
           <div className="inline-flex items-center gap-2 rounded-full glass-dark px-4 py-2 mb-6 text-sm text-white">
             <Trophy className="h-4 w-4 text-accent" />
-            <span className="tracking-widest uppercase">Overall Champions 2026</span>
+            <span className="tracking-widest uppercase">{EVENT.tagline}</span>
           </div>
           <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold leading-tight">
-            Congratulations to Our
-            <span className="block text-gold-gradient mt-2">NCC Cadets</span>
+            {EVENT.heroLine1}
+            <span className="block text-gold-gradient mt-2">{EVENT.heroLine2}</span>
           </h1>
           <p className="mt-8 mx-auto max-w-3xl text-base md:text-lg text-white/85 leading-relaxed">
-            Our NCC cadets have brought immense pride and glory to our institution by
-            securing the <span className="text-accent font-semibold">Overall Championship</span> at
-            the 10-Day Combined Annual Training Camp conducted by the Coimbatore NCC Group at
-            Rathinam Global University.
+            {EVENT.heroSubtitle}
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <button
@@ -256,16 +278,14 @@ function Index() {
               </h2>
             </div>
             <p className="text-base md:text-lg leading-relaxed text-foreground/85">
-              During the 10-Day Combined Annual Training Camp, our cadets showcased exceptional
-              discipline, leadership, teamwork, and dedication. They secured the{" "}
+              {EVENT.achievementBody}{" "}
               <span className="font-display font-bold text-primary">
-                Overall Championship
-              </span>{" "}
-              along with numerous medals and awards in various competitions.
+                {EVENT.achievementTitle}
+              </span>
+              .
             </p>
             <p className="mt-4 text-base md:text-lg leading-relaxed text-foreground/85">
-              Their remarkable performance is a reflection of unwavering commitment, courage,
-              discipline, and excellence — the true hallmarks of an NCC cadet.
+              {EVENT.achievementFootnote}
             </p>
           </div>
         </div>
@@ -288,7 +308,7 @@ function Index() {
             <div className="relative rounded-[2rem] overflow-hidden shadow-elegant border-4 border-white">
               <img
                 src={feliImg}
-                alt="Principal felicitating NCC cadets"
+                alt="Felicitation ceremony"
                 width={1280}
                 height={896}
                 loading="lazy"
@@ -297,8 +317,7 @@ function Index() {
             </div>
           </div>
           <p className="mt-8 mx-auto max-w-2xl text-sm md:text-base text-muted-foreground italic">
-            Our beloved Principal [Principal Name] felicitating the NCC cadets for their
-            outstanding achievements and appreciating their dedication and exemplary performance.
+            {EVENT.felicitationCaption}
           </p>
         </div>
       </section>
@@ -318,9 +337,9 @@ function Index() {
           </div>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[
-              { icon: MapPin, text: "Rathinam Global University" },
-              { icon: Building2, text: "Coimbatore NCC Group" },
-              { icon: Tent, text: "10-Day Combined Annual Training Camp" },
+              { icon: MapPin, text: EVENT.venue },
+              { icon: Calendar, text: EVENT.dateLabel },
+              { icon: Trophy, text: EVENT.hostedBy },
             ].map((it) => (
               <div
                 key={it.text}
@@ -343,21 +362,22 @@ function Index() {
             <Sparkle className="h-8 w-8" />
           </div>
           <blockquote className="font-display text-2xl md:text-4xl lg:text-5xl font-bold leading-tight text-primary">
-            &ldquo;Discipline, Dedication, Determination —
+            &ldquo;{EVENT.quote}
             <span className="block mt-2 text-gold-gradient">
-              the Hallmarks of Every NCC Cadet.&rdquo;
+              {EVENT.quoteAccent}&rdquo;
             </span>
           </blockquote>
         </div>
       </section>
 
-      {/* CADETS TABLE — desktop floating bottom-right, mobile inline */}
+      {/* PARTICIPANTS — mobile inline */}
       <section className="relative px-4 pb-32 lg:hidden">
-        <CadetTable />
+        <ParticipantsTable />
       </section>
 
+      {/* PARTICIPANTS — desktop floating bottom-right */}
       <div className="hidden lg:block fixed bottom-6 right-6 z-30 w-[360px] animate-fade-up">
-        <CadetTable compact />
+        <ParticipantsTable compact />
       </div>
 
       {/* FOOTER */}
@@ -366,14 +386,13 @@ function Index() {
           <div className="glass rounded-[2rem] p-8 md:p-12">
             <Trophy className="mx-auto h-10 w-10 text-accent mb-4" />
             <h3 className="font-display text-2xl md:text-3xl font-bold text-primary">
-              Congratulations Once Again to Our NCC Cadets!
+              {EVENT.footerHeadline}
             </h3>
             <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-              Your hard work, discipline, and determination continue to inspire our
-              institution. Onward and upward — Jai Hind!
+              {EVENT.footerBody}
             </p>
             <div className="mt-6 text-xs uppercase tracking-[0.3em] text-accent font-semibold">
-              [Your College Name] • NCC Wing
+              {EVENT.institution}
             </div>
           </div>
         </div>
@@ -382,29 +401,31 @@ function Index() {
   );
 }
 
-function CadetTable({ compact = false }: { compact?: boolean }) {
+function ParticipantsTable({ compact = false }: { compact?: boolean }) {
   return (
-    <div className={`glass rounded-3xl overflow-hidden shadow-elegant`}>
+    <div className="glass rounded-3xl overflow-hidden shadow-elegant">
       <div className="bg-primary text-primary-foreground px-5 py-4 flex items-center gap-2">
         <Trophy className="h-5 w-5 text-accent" />
-        <h3 className="font-display font-bold tracking-wide">NCC Cadets</h3>
+        <h3 className="font-display font-bold tracking-wide">
+          {EVENT.participantsHeading}
+        </h3>
       </div>
       <div className={compact ? "max-h-[320px] overflow-auto" : ""}>
         <table className="w-full text-sm">
           <thead>
             <tr className="text-left text-xs uppercase tracking-wider text-muted-foreground bg-secondary/40">
               <th className="px-5 py-3 font-semibold">Name</th>
-              <th className="px-5 py-3 font-semibold">Class</th>
+              <th className="px-5 py-3 font-semibold">Class / Team</th>
             </tr>
           </thead>
           <tbody>
-            {CADETS.map((c, i) => (
+            {PARTICIPANTS.map((p, i) => (
               <tr
                 key={i}
                 className="border-t border-border/60 hover:bg-accent/10 transition-colors"
               >
-                <td className="px-5 py-3 font-medium text-primary">{c.name}</td>
-                <td className="px-5 py-3 text-muted-foreground">{c.className}</td>
+                <td className="px-5 py-3 font-medium text-primary">{p.name}</td>
+                <td className="px-5 py-3 text-muted-foreground">{p.detail}</td>
               </tr>
             ))}
           </tbody>
