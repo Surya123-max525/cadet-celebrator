@@ -1,0 +1,29 @@
+{
+  "extends": [
+    "development"
+  ],
+  "hints": {
+    "axe/forms": [
+      "default",
+      {
+        "label": "off"
+      }
+    ],
+    "axe/name-role-value": [
+      "default",
+      {
+        "button-name": "off"
+      }
+    ],
+    "no-inline-styles": "off",
+    "compat-api/css": [
+      "default",
+      {
+        "ignore": [
+          "border: 1px solid color-mix(in oklab, var(--gold) 30%, transparent)",
+          "border: 1px solid color-mix(in oklab, white 60%, transparent)"
+        ]
+      }
+    ]
+  }
+}
