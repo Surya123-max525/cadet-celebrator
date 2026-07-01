@@ -130,14 +130,15 @@
     color: #111 !important;
     background-image: none !important;
   }
-  /* Hide anything not part of the printable poster */
+  /* Hide everything in main except the print poster */
+  main > *:not(.print-poster) {
+    display: none !important;
+  }
   .no-print,
-  .fixed,
-  header,
-  footer,
   button {
     display: none !important;
   }
+
   .print-poster {
     display: flex !important;
     flex-direction: column;
