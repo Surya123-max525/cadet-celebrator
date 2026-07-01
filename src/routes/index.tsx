@@ -204,8 +204,24 @@ function Index() {
 
   return (
     <main className="relative min-h-screen overflow-x-hidden">
-      <ScrollProgress />
-      {showConfetti && <Confetti />}
+      {/* PRINT-ONLY POSTER: shown only when printing (see @media print in styles.css) */}
+      <section className="print-poster hidden">
+        <h1 className="font-display text-4xl font-bold mb-2">
+          {EVENT.heroLine1} {EVENT.heroLine2}
+        </h1>
+        <p className="uppercase tracking-[0.3em] text-sm mb-6">{EVENT.tagline}</p>
+        <img src={feliImg} alt="Felicitation ceremony" />
+        <p className="mt-6 max-w-2xl mx-auto text-base italic">
+          {EVENT.felicitationCaption}
+        </p>
+        <p className="mt-4 font-semibold">{EVENT.institution}</p>
+      </section>
+
+      <div className="screen-only">
+        <ScrollProgress />
+        {showConfetti && <Confetti />}
+      </div>
+
 
       {/* Top corner badges */}
       <div className="pointer-events-none fixed top-4 left-4 z-30">
